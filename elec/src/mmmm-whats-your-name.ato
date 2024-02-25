@@ -112,8 +112,7 @@ module LEDRow:
 
     start_cap = new Capacitor
     power ~ start_cap.power
-    start_cap.vale = 1uF
-    start_cap.package = "0402"
+    start_cap.value = 1uF to 10uF
 
     led1 = new _SK6805EC20
     power ~ led1.power
@@ -154,5 +153,4 @@ module LEDRow:
 
     end_cap = new Capacitor
     power ~ end_cap.power
-    end_cap.vale = 1uF
-    end_cap.package = "0402"
+    end_cap.value = 1uF to 10uF
