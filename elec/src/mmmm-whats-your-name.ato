@@ -5,6 +5,7 @@ from "generics/capacitors.ato" import Capacitor
 from "usb-connectors/usb-connectors.ato" import USBCConn
 from "rp2040/RP2040Kit.ato" import RP2040Kit
 from "sk6805-ec20/elec/src/sk6805-ec20.ato" import _SK6805EC20
+from "generics/buttons.ato" import ButtonSKRPACE010
 
 module MmmmWhatsYourName:
     #
@@ -38,6 +39,11 @@ module MmmmWhatsYourName:
     uc = new RP2040Kit
     _3v3_reg.power_out ~ uc.power
     usb_conn.usb2 ~ uc.usb_if
+    uc.boot_btn.btn -> ButtonSKRPACE010
+    uc.reset_btn.btn -> ButtonSKRPACE010
+    # FIXME: these footprints seem to be broken
+    uc.boot_btn.btn.footprint = "lib:KEY-SMD_4P-L4.2-W3.2-P2.20-LS4.6"
+    uc.reset_btn.btn.footprint = "lib:KEY-SMD_4P-L4.2-W3.2-P2.20-LS4.6"
 
     #
     ## LED Display
@@ -56,8 +62,8 @@ module MmmmWhatsYourName:
 
 component _PinHeader2x1:
     power = new Power
-    pin 1 ~ power.vcc
-    pin 2 ~ power.gnd
+    pin 1 ~ power.gnd
+    pin 2 ~ power.vcc
     footprint = "Connector_PinHeader_1.27mm:PinHeader_1x02_P1.27mm_Vertical"
     mpn = ""
 
