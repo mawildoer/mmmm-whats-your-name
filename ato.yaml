@@ -4,3 +4,8 @@ builds:
     entry: elec/src/mmmm-whats-your-name.ato:MmmmWhatsYourName
 dependencies:
 - generics
+- rp2040 ^v4.0.1
+- tps63020dsjr
+- usb-connectors ^v2.0.2
+- bq24045dsqr ^v0.0.2
+- sk6805-ec20

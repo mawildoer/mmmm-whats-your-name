@@ -1,2 +1,203 @@
+from "tps63020dsjr/elec/src/tps63020dsjr.ato" import TPS63020DSJR
+from "bq24045dsqr/elec/src/bq24045dsqr.ato" import BQ24045DSQR
+from "generics/interfaces.ato" import Power, Pair
+from "usb-connectors/usb-connectors.ato" import USBCConn
+from "rp2040/RP2040Kit.ato" import RP2040Kit
+from "sk6805-ec20/elec/src/sk6805-ec20.ato" import _SK6805EC20
+
 module MmmmWhatsYourName:
-    signal gnd
+    #
+    ## Power
+    batt_pwr = new Power
+    batt_pads = new _PinHeader2x1
+    batt_pads.power ~ batt_pwr
+
+    # By default, this module is configured for 3.3V operation
+    _3v3_reg = new TPS63020DSJR
+    batt_pwr ~ _3v3_reg.power_in
+    _3v3_reg.feedback_div.r_top.value = 1MΩ ± 5%
+
+    # https://www.ti.com/lit/ds/symlink/tps63021.pdf#page=16
+    _5v_reg = new TPS63020DSJR
+    _5v_reg.feedback_div.r_top.value = 1.6MΩ ± 5%
+    batt_pwr ~ _5v_reg.power_in
+
+    #
+    ## USB
+    usb_conn = new USBCConn
+
+    #
+    ## Charger IC
+    bq24045dsqr = new BQ24045DSQR
+    usb_conn.power ~ bq24045dsqr.power_in
+    bq24045dsqr.power_batt ~ batt_pwr
+
+    #
+    ## Microcontroller
+    uc = new RP2040Kit
+    _3v3_reg.power_out ~ uc.power
+    usb_conn.usb2 ~ uc.usb_if
+
+    #
+    ## LED Display
+    led_display = new LEDDisplay
+    _5v_reg.power_out ~ led_display.power
+    uc.gpio16 ~ led_display.din.io
+    uc.power.gnd ~ led_display.din.gnd
+
+    #
+    ## LED Health-bar
+    led_health_bar = new LEDRow
+    _5v_reg.power_out ~ led_health_bar.power
+    uc.gpio17 ~ led_health_bar.din.io
+    uc.power.gnd ~ led_health_bar.din.gnd
+
+
+component _PinHeader2x1:
+    power = new Power
+    pin 1 ~ power.vcc
+    pin 2 ~ power.gnd
+    footprint = "Connector_PinHeader_1.27mm:PinHeader_1x02_P1.27mm_Vertical"
+    mpn = ""
+
+
+module LEDDisplay:
+    power = new Power
+    din = new Pair
+    dout = new Pair
+
+    row1 = new LEDRow
+    power ~ row1.power
+    din ~ row1.din
+
+    row2 = new LEDRow
+    power ~ row2.power
+    row1.dout ~ row2.din
+
+    row3 = new LEDRow
+    power ~ row3.power
+    row2.dout ~ row3.din
+
+    row4 = new LEDRow
+    power ~ row4.power
+    row3.dout ~ row4.din
+
+    row5 = new LEDRow
+    power ~ row5.power
+    row4.dout ~ row5.din
+
+    row6 = new LEDRow
+    power ~ row6.power
+    row5.dout ~ row6.din
+
+    row7 = new LEDRow
+    power ~ row7.power
+    row6.dout ~ row7.din
+
+    row8 = new LEDRow
+    power ~ row8.power
+    row7.dout ~ row8.din
+
+    row9 = new LEDRow
+    power ~ row9.power
+    row8.dout ~ row9.din
+
+    row10 = new LEDRow
+    power ~ row10.power
+    row9 .dout~ row10.din
+
+    row11 = new LEDRow
+    power ~ row11.power
+    row10.dout ~ row11.din
+
+    row12 = new LEDRow
+    power ~ row12.power
+    row11.dout ~ row12.din
+
+    row13 = new LEDRow
+    power ~ row13.power
+    row12.dout ~ row13.din
+
+    row14 = new LEDRow
+    power ~ row14.power
+    row13.dout ~ row14.din
+
+    row15 = new LEDRow
+    power ~ row15.power
+    row14.dout ~ row15.din
+
+    row16 = new LEDRow
+    power ~ row16.power
+    row15.dout ~ row16.din
+    row16.dout ~ dout
+
+
+module LEDRow:
+    power = new Power
+    din = new Pair
+    dout = new Pair
+
+    led1 = new _SK6805EC20
+    power ~ led1.power
+    din ~ led1.din
+
+    led2 = new _SK6805EC20
+    power ~ led2.power
+    led1.dout ~ led2.din
+
+    led3 = new _SK6805EC20
+    power ~ led3.power
+    led2.dout ~ led3.din
+
+    led4 = new _SK6805EC20
+    power ~ led4.power
+    led3.dout ~ led4.din
+
+    led5 = new _SK6805EC20
+    power ~ led5.power
+    led4.dout ~ led5.din
+
+    led6 = new _SK6805EC20
+    power ~ led6.power
+    led5.dout ~ led6.din
+
+    led7 = new _SK6805EC20
+    power ~ led7.power
+    led6.dout ~ led7.din
+
+    led8 = new _SK6805EC20
+    power ~ led8.power
+    led7.dout ~ led8.din
+
+    led9 = new _SK6805EC20
+    power ~ led9.power
+    led8.dout ~ led9.din
+
+    led10 = new _SK6805EC20
+    power ~ led10.power
+    led9.dout ~ led10.din
+
+    led11 = new _SK6805EC20
+    power ~ led11.power
+    led10.dout ~ led11.din
+
+    led12 = new _SK6805EC20
+    power ~ led12.power
+    led11.dout ~ led12.din
+
+    led13 = new _SK6805EC20
+    power ~ led13.power
+    led12.dout ~ led13.din
+
+    led14 = new _SK6805EC20
+    power ~ led14.power
+    led13.dout ~ led14.din
+
+    led15 = new _SK6805EC20
+    power ~ led15.power
+    led14.dout ~ led15.din
+
+    led16 = new _SK6805EC20
+    power ~ led16.power
+    led15.dout ~ led16.din
+    led16.dout ~ dout
