@@ -1,0 +1,11 @@
+component _1TS017C_2500_0400:
+    # component 1TS017C-2500-0400
+    footprint = "KEY-SMD_4P-L3.7-W3.7-P2.75"
+    lcsc_id = "C256108"
+    mpn = "C256108"
+    # pins
+    signal _4 ~ pin 4
+    signal _3 ~ pin 3
+    signal _2 ~ pin 2
+    signal _1 ~ pin 1
+
