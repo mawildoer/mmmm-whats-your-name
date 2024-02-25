@@ -1,6 +1,7 @@
 from "tps63020dsjr/elec/src/tps63020dsjr.ato" import TPS63020DSJR
 from "bq24045dsqr/elec/src/bq24045dsqr.ato" import BQ24045DSQR
 from "generics/interfaces.ato" import Power, Pair
+from "generics/capacitors.ato" import Capacitor
 from "usb-connectors/usb-connectors.ato" import USBCConn
 from "rp2040/RP2040Kit.ato" import RP2040Kit
 from "sk6805-ec20/elec/src/sk6805-ec20.ato" import _SK6805EC20
@@ -101,41 +102,18 @@ module LEDDisplay:
     row9 = new LEDRow
     power ~ row9.power
     row8.dout ~ row9.din
-
-    row10 = new LEDRow
-    power ~ row10.power
-    row9 .dout~ row10.din
-
-    row11 = new LEDRow
-    power ~ row11.power
-    row10.dout ~ row11.din
-
-    row12 = new LEDRow
-    power ~ row12.power
-    row11.dout ~ row12.din
-
-    row13 = new LEDRow
-    power ~ row13.power
-    row12.dout ~ row13.din
-
-    row14 = new LEDRow
-    power ~ row14.power
-    row13.dout ~ row14.din
-
-    row15 = new LEDRow
-    power ~ row15.power
-    row14.dout ~ row15.din
-
-    row16 = new LEDRow
-    power ~ row16.power
-    row15.dout ~ row16.din
-    row16.dout ~ dout
+    row9.dout ~ dout
 
 
 module LEDRow:
     power = new Power
     din = new Pair
     dout = new Pair
+
+    start_cap = new Capacitor
+    power ~ start_cap.power
+    start_cap.vale = 1uF
+    start_cap.package = "0402"
 
     led1 = new _SK6805EC20
     power ~ led1.power
@@ -172,32 +150,9 @@ module LEDRow:
     led9 = new _SK6805EC20
     power ~ led9.power
     led8.dout ~ led9.din
+    led9.dout ~ dout
 
-    led10 = new _SK6805EC20
-    power ~ led10.power
-    led9.dout ~ led10.din
-
-    led11 = new _SK6805EC20
-    power ~ led11.power
-    led10.dout ~ led11.din
-
-    led12 = new _SK6805EC20
-    power ~ led12.power
-    led11.dout ~ led12.din
-
-    led13 = new _SK6805EC20
-    power ~ led13.power
-    led12.dout ~ led13.din
-
-    led14 = new _SK6805EC20
-    power ~ led14.power
-    led13.dout ~ led14.din
-
-    led15 = new _SK6805EC20
-    power ~ led15.power
-    led14.dout ~ led15.din
-
-    led16 = new _SK6805EC20
-    power ~ led16.power
-    led15.dout ~ led16.din
-    led16.dout ~ dout
+    end_cap = new Capacitor
+    power ~ end_cap.power
+    end_cap.vale = 1uF
+    end_cap.package = "0402"

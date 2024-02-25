@@ -2,6 +2,8 @@ ato-version: ^0.2.0
 builds:
   default:
     entry: elec/src/mmmm-whats-your-name.ato:MmmmWhatsYourName
+  led-row:
+    entry: elec/src/mmmm-whats-your-name.ato:LEDRow
 dependencies:
 - generics
 - rp2040 ^v4.0.1
